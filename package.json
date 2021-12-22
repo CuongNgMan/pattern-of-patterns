@@ -1,0 +1,18 @@
+{
+  "name": "currency-converter",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "EPAM assessment - Currency Converter",
+  "scripts": {
+    "db": "json-server -w db.json",
+    "start": "parcel index.html"
+  },
+  "keywords": [],
+  "author": "Cuong Nguyen",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "json-server": "^0.17.0",
+    "parcel": "^2.0.1"
+  }
+}
