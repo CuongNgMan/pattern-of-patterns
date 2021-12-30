@@ -1,21 +1,21 @@
-type Listener<EventType> = (ev: EventType) => void;
+type Listener<T> = (ev: T) => void;
 
-type Observer<EventType> = {
-  subscribe: (listener: Listener<EventType>) => () => void;
-  publish: (event: EventType) => void;
+type Observer<T> = {
+  subscribe: (listener: Listener<T>) => () => void;
+  publish: (event: T) => void;
 };
 
-function createObserver<EventType>(): Observer<EventType> {
-  let listeners: Listener<EventType>[] = [];
+function createObserver<T>(): Observer<T> {
+  let listeners: Listener<T>[] = [];
 
   return {
-    subscribe: (listener: Listener<EventType>): (() => void) => {
+    subscribe: (listener: Listener<T>): (() => void) => {
       listeners.push(listener);
       return () => {
         listeners = listeners.filter((l) => l !== listener);
       };
     },
-    publish: (event: EventType) => {
+    publish: (event: T) => {
       listeners.forEach((l) => l(event));
     },
   };
@@ -26,19 +26,19 @@ type CurrencyChangeEvent = {
   value: number;
 };
 
-export interface CurrencyConverterItemProps {
+export interface CurrencyConverterItemSliderProps {
   currencyName: string;
   currencyRate: number;
 }
 
-export class CurrencyConverterItem {
+export class CurrencyConverterSliderItem {
   private _parent: Element;
   private _euroQuantity: number = 100;
   private _xName: string = '';
   private _xRate: number = 0;
   private _observer: Observer<CurrencyChangeEvent> = createObserver<CurrencyChangeEvent>();
 
-  constructor(root: Element, data: CurrencyConverterItemProps) {
+  constructor(root: Element, data: CurrencyConverterItemSliderProps) {
     this._parent = root;
 
     this._xName = data.currencyName;
@@ -48,17 +48,13 @@ export class CurrencyConverterItem {
       const { type, value } = data;
 
       if (type === 'EUR') {
-        const xCurrency = this.getElement(`.${this.xName}-euro`) as HTMLInputElement;
-        xCurrency.value = this.convertToFixPosition(value * this.xRate, 5);
+        const xCurrency = this.getElement(`.slider-${this.xName}-euro`) as HTMLInputElement;
+        xCurrency.value = parseFloat(`${value * this.xRate}`).toFixed(3);
       } else {
-        const euro = this.getElement(`.euro-${this.xName}`) as HTMLInputElement;
-        euro.value = this.convertToFixPosition(value / this.xRate, 5);
+        const euro = this.getElement(`.slider-euro-${this.xName}`) as HTMLInputElement;
+        euro.value = parseFloat(`${value / this.xRate}`).toFixed(2);
       }
     });
-  }
-
-  private convertToFixPosition(v: number, position: number) {
-    return parseFloat(`${v}`).toFixed(position);
   }
 
   getElement(selector: string) {
@@ -71,8 +67,8 @@ export class CurrencyConverterItem {
 
   eventsMap(): { [k: string]: (event) => void } {
     return {
-      [`keyup:.euro-${this.xName}`]: this.onEuroCurrencyChangeHandler,
-      [`keyup:.${this.xName}-euro`]: this.onXCurrencyChangeHandler,
+      [`change:.slider-euro-${this.xName}`]: this.onEuroCurrencyChangeHandler,
+      [`change:.slider-${this.xName}-euro`]: this.onXCurrencyChangeHandler,
     };
   }
 
@@ -117,10 +113,10 @@ export class CurrencyConverterItem {
               <tbody>
                 <tr>
                   <td>
-                    <input class='euro-${this.xName}' type='number' value='${this.euroQuantity}'/>
+                    <input class='slider-euro-${this.xName}' type='range' min='1' max='1000' step='1'/>
                   </td>
                   <td>
-                    <input class='${this.xName}-euro' type='number' value='${this.xValue}' data-currency='${this.xName}'/>
+                    <input class='slider-${this.xName}-euro' type='range' min='1' max='${Math.floor(this.xRate * 1000)}' step='1'/>
                   </td>
                 </tr>
               </tbody>
@@ -144,7 +140,7 @@ export class CurrencyConverterItem {
   }
 
   get xValue() {
-    return this.convertToFixPosition(this.euroQuantity * this.xRate, 5);
+    return this.euroQuantity * this.xRate;
   }
 
   set euroQuantity(value) {

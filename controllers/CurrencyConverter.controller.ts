@@ -1,28 +1,32 @@
 import { CurrencyRate } from '../models/CurrencyRate';
 import { Currency, CurrencyProps } from '../models/currency';
 import { CurrencyConverter } from '../views/CurrencyConverter';
-import { CurrencyConverterItem } from '../views/CurrencyConverterItem';
+import { CurrencyConverterItemProps } from '../views/CurrencyConverterItem';
 
 export class CurrencyController {
   constructor() {}
 
   async boot(root: Element) {
-    new CurrencyConverter(root).render();
     const rates = CurrencyRate.createCurrencyRateCollection();
     await rates.fetch();
-    const euroRate = rates.select((item) => item.get('id'), 'EUR');
+    const euroRate = rates.select({
+      strategy: (item) => item.get('id'),
+      value: 'EUR',
+    });
 
     const currencies = Currency.createCurrencyCollection();
     await currencies.fetch();
 
-    currencies.data.forEach((currency) => {
+    const currenciesData = currencies.transform<CurrencyConverterItemProps>((currency) => {
       const rate = euroRate.get('exchangeRate')[currency.get('id')];
       if (rate) {
-        new CurrencyConverterItem(root, {
+        return {
           currencyName: currency.get('abbreviation'),
-          currencyRate: euroRate.get('exchangeRate')[currency.get('id')],
-        }).render();
+          currencyRate: rate,
+        };
       }
     });
+
+    new CurrencyConverter(root, currenciesData).render();
   }
 }

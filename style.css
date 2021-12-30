@@ -10,15 +10,22 @@ body {
 }
 
 #root {
+  background: #16a2f3;
   display: flex;
   height: 100vh;
-  background: #16a2f3;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.currency-item-container {
+  display: flex;
+  height: 100vh;
   flex-direction: column;
   justify-content: flex-start;
 }
 
 .currency-item {
-  margin: 20px auto;
+  margin: 10px auto;
   padding: 10px 10px;
   border: 2px solid #f2f2f2;
   border-radius: 10px;
@@ -27,7 +34,6 @@ body {
 .currency-exchange-info {
   margin: 10px 0 10px 0;
 }
-
 
 /* The switch - the box around the slider */
 .switch {
@@ -82,3 +88,5 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
+
+/* Slide */

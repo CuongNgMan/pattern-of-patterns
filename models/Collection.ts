@@ -25,8 +25,13 @@ export class Collection<T, K> {
     return this._events.trigger;
   }
 
-  select(strategy: (item: T) => any, value): T | undefined {
+  select(args: { strategy: (item: T) => any; value }): T | undefined {
+    const { strategy, value } = args;
     return this._models.find((i) => strategy(i) === value);
+  }
+
+  transform<NewType>(cb: (value: T, index?: number, array?: T[]) => NewType): NewType[] {
+    return this.data.map<NewType>(cb).filter((i) => i);
   }
 
   async fetch() {
