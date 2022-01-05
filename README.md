@@ -17,6 +17,6 @@ npm run start
 ```
 
 Notes:
-- JSON server is listening on port `3030` by default (port can be changed via `json-server.json` file)
+- JSON server is listening on port `3030` by default.
 - Parcel is listening on port `1234` by default.
 - Mock-up data is stored in `db.json` file.
