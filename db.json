@@ -1,34 +1,25 @@
 {
-  "currencies": [
-    {
-      "id": "EUR",
-      "title": "Euro",
-      "abbreviation": "EUR"
-    },
-    {
-      "id": "YEN",
-      "title": "Japanese YEN",
-      "abbreviation": "YEN"
-    },
-    {
-      "id": "USD",
-      "title": "US Dollar",
-      "abbreviation": "USD"
-    },
-    {
-      "id": "INR",
-      "title": "Indian Rupee",
-      "abbreviation": "INR"
-    }
-  ],
   "rates": [
     {
-      "id": "EUR",
-      "exchangeRate": {
-        "YEN": 129.122441,
-        "USD": 1.131478,
-        "INR": 86.104141
-      }
+      "currencyName": "YEN",
+      "id": 1,
+      "currencyRate": 129.122441,
+      "euroQuantity": 10,
+      "convertedValue": 1291.22441
+    },
+    {
+      "currencyName": "USD",
+      "id": 2,
+      "currencyRate": 1.131478,
+      "euroQuantity": 10,
+      "convertedValue": 11.314779999999999
+    },
+    {
+      "currencyName": "INR",
+      "id": 3,
+      "currencyRate": 86.104141,
+      "euroQuantity": 10,
+      "convertedValue": 861.04141
     }
   ]
 }
